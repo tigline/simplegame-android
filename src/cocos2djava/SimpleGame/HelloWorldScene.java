@@ -2,7 +2,9 @@ package cocos2djava.SimpleGame;
 
 import android.app.Activity;
 import android.app.Application.ActivityLifecycleCallbacks;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
@@ -39,7 +41,21 @@ public class HelloWorldScene extends CCLayer
 	protected int _projectilesDestroyed;
 	private ISelector spriteMoveFinished;
 	private ISelector gamelogic;
-	
+	private static Activity sceneContext;
+	public static CCScene scene(Activity context) {
+		// TODO Auto-generated method stub
+		sceneContext = context;
+		CCScene scene = new CCScene();
+		scene.init();
+		
+		CCLayer layer = new HelloWorldScene();
+		layer.init();
+		
+		scene.addChild(layer, 1, 1);
+		
+		return scene;
+		
+	}
 	static CCScene scene()
 	{
 		CCScene scene = new CCScene();
@@ -69,7 +85,7 @@ public class HelloWorldScene extends CCLayer
 			startActivity(intent);
 			finish();
 		 */
-		CCMenuItemSprite pCloseItem = new CCMenuItemSprite("data/CloseNormal.png", "data/CloseSelected.png",this, "menuCloseCallback");
+		CCMenuItemSprite pCloseItem = new CCMenuItemSprite("data/CloseNormal.png", "data/CloseSelected.png",this, "goToPlayer");
 		// Place the menu item bottom-right conner.
         CCSize visibleSize = CCDirector.sharedDirector().getVisibleSize();
         CCPoint origin = CCDirector.sharedDirector().getVisibleOrigin();
@@ -105,11 +121,20 @@ public class HelloWorldScene extends CCLayer
 		
 		return true;
 	}
-	
-	public void goToPlayer(){
-//		Intent intent = new Intent(, PlayerActivity.class);
-//		startActivity(intent);
-//		finish();
+	public void openActivity(Activity activity, Class<?> pClass, Bundle bundle) {
+		Intent intent = new Intent(activity, pClass);
+		if (bundle != null) {
+			intent.putExtras(bundle);
+		}
+		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		activity.startActivity(intent);
+	}
+	public void goToPlayer(Object o){
+		Bundle b = new Bundle();
+		//Intent intent = new Intent(SceneContext, PlayerActivity.class);
+		openActivity(sceneContext, PlayerActivity.class, b);
+		//startActivity(intent);
+		//finish();
 	}
 	
 	public void menuCloseCallback(Object o)
@@ -289,6 +314,7 @@ public class HelloWorldScene extends CCLayer
 		sound.setVolume(1);
 		sound.play();
 	}
+	
 	
 	
 	

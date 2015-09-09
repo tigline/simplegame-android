@@ -13,7 +13,7 @@ public class MainActivity extends AndroidApplication {
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = true;
         
-        new AppDelegate();
+        new AppDelegate(this);
         initialize(Cocos2d.Game(), cfg);
         
         
